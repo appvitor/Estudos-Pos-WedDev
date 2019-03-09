@@ -1,0 +1,43 @@
+
+<div class="container" ng-init="init()">
+
+    <form id="form" name="form">     
+
+        <h3><i class="glyphicon glyphicon-pencil"></i> Saque</h3>
+        <hr>
+        <div class="alert alert-warning" ng-show="form.$invalid && submitted">
+            <strong>Atenção</strong>
+            <!--            <li ng-show="form.nome.$error.required">Campo <strong>Nome</strong> é obrigatório!</li>            -->
+        </div>
+
+        <div class="row">
+            <div class="form-group col-sm-2">
+                <label>Código</label>
+                <input ng-model="operacao.id" type="text" class="form-control" ng-disabled="true">
+            </div>
+        </div>    
+
+        <div class="row">
+            <div class="form-group col-sm-12">
+                <label>Conta</label>
+                <select ng-disabled="true" ng-model="operacao.conta" name="conta" required class="form-control" ng-options="c.cliente.id + ' / ' + c.cliente.nome + ' / ' + c.agencia.nome + ' / ' + c.agencia.banco.nome for c in contas track by c.id">
+                </select>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group col-sm-4">
+                <label>Valor</label>
+                <input autofocus ng-model="operacao.valor" name="valor" required type="number" class="form-control" step="0.00">
+            </div>
+        </div>
+
+        <div class="row pull-right">
+            <div class="form-group col-lg-12 col-sm-12">          
+                <button type="submit" ng-click="save()" class="btn btn-success" ng-disabled="loading"><i class="glyphicon glyphicon-ok"></i> Salvar</button>
+                <a href="#Conta/list" class="btn btn-danger"><i class="glyphicon glyphicon-remove"></i> Cancelar</a>
+            </div>
+        </div> 
+    </form>
+
+</div>

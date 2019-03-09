@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt" ng-app="ExemploApp">
+    <head>
+        <title>Webdev</title>
+        <meta charset="utf-8">
+
+        <link href="Lib/css/bootstrap.min.css" rel="stylesheet">
+        <link href="Lib/css/local.css" rel="stylesheet">
+
+        <script src="./Lib/js/Library/jquery.min.js"></script>
+        <script src="./Lib/js/Library/bootstrap.min.js"></script>
+        <script src="./Lib/js/Library/angular.min.js"></script>
+        <script src="./Lib/js/Library/angular-route.min.js"></script>
+
+        <script src="./Lib/js/start.js"></script>
+        <script src="./Lib/js/router.js"></script>
+
+        <script type="text/javascript" src="./Lib/js/Controller/index.controller.js"></script>
+        <script type="text/javascript" src="./Lib/js/Controller/login.controller.js"></script>
+        <script type="text/javascript" src="./Lib/js/Controller/usuario.controller.js"></script>
+        <script type="text/javascript" src="./Lib/js/Controller/banco.controller.js"></script>
+        <script type="text/javascript" src="./Lib/js/Controller/cliente.controller.js"></script>
+        <script type="text/javascript" src="./Lib/js/Controller/agencia.controller.js"></script>
+        <script type="text/javascript" src="./Lib/js/Controller/conta.controller.js"></script>
+        <script type="text/javascript" src="./Lib/js/Controller/operacao.controller.js"></script>
+
+        <script type="text/javascript">
+            angular.element(document.getElementsByTagName('head')).append(angular.element('<base href="' + window.location.pathname + '" />'));
+        </script>       
+    </head>
+
+    <body ng-controller="IndexController" ng-init="init()">
+
+        <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                </div>
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav" ng-hide="!loginRealizado">                        
+                        <li ><a href="#/">Home</a></li>
+                        <li class="dropdown">
+                            <a href class="dropdown-toggle" data-toggle="dropdown">Cadastros <b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#Usuario/list">Usuário</a></li>
+                                <li><a href="#Banco/list">Banco</a></li>
+                                <li><a href="#Agencia/list">Agência</a></li>
+                                <li><a href="#Conta/list">Conta</a></li>
+                                <li><a href="#Cliente/list">Cliente</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">  
+                        <li><a href="#Entrar" ng-hide="loginRealizado">Entrar</a></li>            
+                        <li><a href="#Sair" ng-hide="!loginRealizado">Sair</a></li>            
+                    </ul>
+                </div><!--/.navbar-collapse -->
+            </div>
+        </div>
+
+        <div ng-view></div>
+
+        <div class="container">
+            <hr>
+            <footer class="pull-right">
+                <p>&copy;  Desenvolvimento: <span class="glyphicon glyphicon-user"></span> WEBDEV</p>
+            </footer>
+        </div>
+    </body>
+</html>

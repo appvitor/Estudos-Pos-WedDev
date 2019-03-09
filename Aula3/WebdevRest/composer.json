@@ -1,0 +1,13 @@
+{
+    "require": {        
+        "slim/slim": "3.x",
+        "firebase/php-jwt": "*"
+    },
+     "autoload": {
+        "psr-4": {
+            "controller\\": "slim/aplicacao/controller",
+            "model\\": "slim/aplicacao/model",
+            "util\\": "slim/aplicacao/util"
+        }
+    }
+}

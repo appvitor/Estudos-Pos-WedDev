@@ -1,0 +1,46 @@
+
+<br>
+
+<div class="container" ng-init="init()">
+
+    <form id="form" name="form">  
+
+        <div class="row">            
+            <div class="col-sm-6 col-sm-offset-3">
+                <h3> <i class="glyphicon glyphicon-user"></i> Entrar </h3>
+
+                <hr>
+
+                <div class="alert alert-{{mensagem_tipo}} alert-dismissable" ng-show="mensagem.length > 0">
+                    <strong>Atenção!</strong> {{mensagem}}
+                </div>
+
+                <div class="alert alert-warning" ng-show="form.$invalid && submitted">
+                    <strong>Atenção!</strong>
+                    <li ng-show="form.usuario.$error.required">Campo "Usuário" é obrigatório.</li>
+                    <li ng-show="form.senha.$error.required">Campo "Senha é obrigatório"</li>
+                </div>
+
+                <div class="row">
+                    <div class="form-group col-sm-12">
+                        <label for="usuario">Usuario</label>
+                        <input ng-model="usuario.usuario" name="usuario" type="text" class="form-control" placeholder="Digite seu usuário" required>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group col-sm-6">
+                        <label for="senha">Senha</label>
+                        <input ng-model="usuario.senha" name="senha" type="password" class="form-control" required>
+                    </div>
+                </div>
+                <div class="row pull-left">
+                    <div class="form-group col-lg-12 col-sm-12">
+                        <button type="submit" ng-click="login()" class="btn btn-success" ng-disabled="loading"><i class="glyphicon glyphicon-ok"></i> Entrar </button>
+                        <a href="#RecuperarSenha" class="btn btn-link" role="button">Esqueci a senha</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,63 @@
+
+<div class="container" ng-init="init()">
+
+    <form id="form" name="form">     
+
+        <h3><i class="glyphicon glyphicon-pencil"></i> Cadastro de Conta</h3>
+        <hr>
+        <div class="alert alert-warning" ng-show="form.$invalid && submitted">
+            <strong>Atenção</strong>
+            <!--            <li ng-show="form.nome.$error.required">Campo <strong>Nome</strong> é obrigatório!</li>            -->
+        </div>
+
+        <div class="row">
+            <div class="form-group col-sm-2">
+                <label>Código</label>
+                <input ng-model="conta.id" type="text" class="form-control" ng-disabled="true">
+            </div>
+        </div>    
+
+        <div class="row">
+            <div class="form-group col-sm-12">
+                <label>Cliente</label>
+                <select ng-model="conta.cliente" ng-disabled="conta.id != null" name="cliente" required class="form-control" ng-options="c.nome for c in clientes track by c.id">
+                </select>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group col-sm-12">
+                <label>Agência</label>
+                <select ng-model="conta.agencia" ng-disabled="conta.id != null" name="agencia" required class="form-control" ng-options="a.nome for a in agencias track by a.id">
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-sm-4">
+                <label>Limite</label>
+                <input ng-model="conta.limite" name="limite" required type="number" class="form-control" step="0.00">
+            </div>
+            <div class="form-group col-sm-4">
+                <label>Situação</label>
+                <div class="form-control">
+                    <label>
+                        <input ng-model="conta.situacao" value="A" name="situacao"  type="radio">
+                        Ativa
+                    </label>
+                    <label>
+                        <input ng-model="conta.situacao" value="I" name="situacao"  type="radio">
+                        Inativa 
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="row pull-right">
+            <div class="form-group col-lg-12 col-sm-12">          
+                <button type="submit" ng-click="save()" class="btn btn-success" ng-disabled="loading"><i class="glyphicon glyphicon-ok"></i> Salvar</button>
+                <a href="#Conta/list" class="btn btn-danger"><i class="glyphicon glyphicon-remove"></i> Cancelar</a>
+            </div>
+        </div> 
+    </form>
+
+</div>

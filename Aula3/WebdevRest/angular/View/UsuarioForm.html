@@ -1,0 +1,56 @@
+
+<div class="container" ng-init="init()">
+
+    <form id="form" name="form">     
+
+        <h3><i class="glyphicon glyphicon-pencil"></i> Cadastro de Usuario</h3>
+        <hr>
+
+        <div class="alert alert-warning" ng-show="form.$invalid && submitted">
+            <strong>Atenção</strong>
+            <li ng-show="form.nome.$error.required">Campo <strong>Nome</strong> é obrigatório!</li>            
+        </div>
+
+        <div class="row">
+            <div class="form-group col-sm-2">
+                <label>Código</label>
+                <input ng-model="usuario.idUsuario" type="text" class="form-control" ng-disabled="true">
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-sm-12">
+                <label>Nome</label>
+                <input ng-model="usuario.nome" name="nome" required type="text" class="form-control" placeholder="Digite o nome para o usuario">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group col-sm-6">
+                <label>Usuário</label>
+                <input ng-model="usuario.usuario" name="usuario" required type="text" class="form-control" placeholder="Digite o nome deusuario">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group col-sm-6">
+                <label>Senha</label>
+                <input ng-model="usuario.senha" name="senha" required type="password" class="form-control" placeholder="Digite a senha">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group col-sm-12">
+                <label>Permissão</label>
+                <select size="6" ng-model="usuario.permissoes" multiple class="form-control" ng-options="p.descricao for p in permissoes track by p.idPermissao"></select>
+            </div>
+        </div>
+
+        <div class="row pull-right">
+            <div class="form-group col-lg-12 col-sm-12">          
+                <button type="submit" ng-click="save()" class="btn btn-success" ng-disabled="loading"><i class="glyphicon glyphicon-ok"></i> Salvar</button>
+                <a href="#Usuario/list" class="btn btn-danger"><i class="glyphicon glyphicon-remove"></i> Cancelar</a>
+            </div>
+        </div> 
+    </form>
+
+</div>
