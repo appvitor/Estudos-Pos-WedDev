@@ -6,16 +6,16 @@ use Psr\Http\Message\ResponseInterface as Response;
 $app->group("/eleicao", function() use ($app) {
 
     $this->get("", function(Request $request, Response $response, $args = []) use ($app) {
-        return $response->write(json_encode(CandidatoController::listar()));
+        return $response->write(json_encode(EleicaoController::listar()));
     });
 
     $this->get("/{id:[0-9]+}", function(Request $request, Response $response, $args = []) use ($app) {
-        $candidato = CandidatoController::recuperar($args["id"]);
+        $eleicao = EleicaoController::recuperar($args["id"]);
 
-        if ($candidato) {
-            return $response->write(json_encode($candidato));
+        if ($eleicao) {
+            return $response->write(json_encode($eleicao));
         } else {
-            throw new MyException("Candidato não encontrado", 404);
+            throw new MyException("Eleição não encontrada", 404);
         }
     });
 
@@ -30,21 +30,16 @@ $app->group("/eleicao", function() use ($app) {
             throw new MyException("Nome é obrigatório!", 400);
         }
 
-        if (!property_exists($json, "cpf") || !$json->cpf) {
-            throw new MyException("CPF é obrigatório!", 400);
+        if (!property_exists($json, "ano") || !$json->ano) {
+            throw new MyException("ano é obrigatório!", 400);
         }
 
-        if (!property_exists($json, "apto") || !$json->apto) {
-            throw new MyException("Apto é obrigatório!", 400);
-        }
+        $eleicao = new Eleicao();
+        $eleicao->nome = $json->nome;
+        $eleicao->ano = $json->ano;
 
-        $candidato = new Candidato();
-        $candidato->nome = $json->nome;
-        $candidato->cpf = $json->cpf;
-        $candidato->apto = $json->apto;
-
-        $idCandidato = CandidatoController::criar($candidato);
-        return $response->write(json_encode(CandidatoController::recuperar($idCandidato)));
+        $idCandidato = EleicaoController::criar($eleicao);
+        return $response->write(json_encode(EleicaoController::recuperar($idCandidato)));
     });
 
     $this->put("/{id:[0-9]+}", function(Request $request, Response $response, $args = []) use ($app) {
@@ -59,35 +54,30 @@ $app->group("/eleicao", function() use ($app) {
             throw new MyException("Nome é obrigatório!", 400);
         }
 
-        if (!property_exists($json, "cpf") || !$json->cpf) {
-            throw new MyException("CPF é obrigatório!", 400);
+        if (!property_exists($json, "ano") || !$json->ano) {
+            throw new MyException("ano é obrigatório!", 400);
         }
 
-        if (!property_exists($json, "apto") || !$json->cpf) {
-            throw new MyException("Apto é obrigatório!", 400);
+        if (!$eleicao = EleicaoController::recuperar($idCandidato)) {
+            throw new MyException("Eleição não encontrada!", 404);
         }
 
-        if (!$candidato = CandidatoController::recuperar($idCandidato)) {
-            throw new MyException("Candidato não encontrado!", 404);
-        }
+        $eleicao->nome = $json->nome;
+        $eleicao->ano = $json->ano;
 
-        $candidato->nome = $json->nome;
-        $candidato->cpf = $json->cpf;
-        $candidato->apto = $json->apto;
-
-        CandidatoController::alterar($candidato);
-        return $response->write(json_encode(CandidatoController::recuperar($idCandidato)));
+        EleicaoController::alterar($eleicao);
+        return $response->write(json_encode(EleicaoController::recuperar($idCandidato)));
     });
 
     $this->delete("/{id:[0-9]+}", function(Request $request, Response $response, $args = []) use ($app) {
         $idCandidato = $args["id"];
 
-        if (!$candidato = CandidatoController::recuperar($idCandidato)) {
-            throw new MyException("Candidato não encontrado!", 404);
+        if (!$eleicao = EleicaoController::recuperar($idCandidato)) {
+            throw new MyException("Eleição não encontrada!", 404);
         }
 
-        CandidatoController::excluir($candidato);
-        return $response->write(json_encode($candidato));
+        EleicaoController::excluir($eleicao);
+        return $response->write(json_encode($eleicao));
     });
 });
 
