@@ -11,7 +11,7 @@ class Conexao {
     public static function getConexao() {
 
         if (!self::$conexao) {
-            self::$conexao = new PDO("mysql:host=localhost;dbname=webdev;charset=utf8", "root", "");
+            self::$conexao = new PDO("mysql:host=localhost;dbname=atividade;charset=utf8", "root", "");
             self::$conexao->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         }
 

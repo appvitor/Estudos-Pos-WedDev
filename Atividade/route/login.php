@@ -22,8 +22,6 @@ $app->post("/login", function(Request $request, Response $response) {
         throw new MyException("Usuário ou Senha incorreto!", 403);
     }
 
-    PermissaoUtil::temPermissao($usuario, "REALIZAR_LOGIN");
-
     $jwt = new stdClass();
     $jwt->id = $usuario->idUsuario;
     $jwt->exp = time() + (60 * 60);
