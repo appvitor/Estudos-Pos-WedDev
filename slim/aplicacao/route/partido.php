@@ -6,16 +6,16 @@ use Psr\Http\Message\ResponseInterface as Response;
 $app->group("/partido", function() use ($app) {
 
     $this->get("", function(Request $request, Response $response, $args = []) use ($app) {
-        return $response->write(json_encode(CandidatoController::listar()));
+        return $response->write(json_encode(PartidoController::listar()));
     });
 
     $this->get("/{id:[0-9]+}", function(Request $request, Response $response, $args = []) use ($app) {
-        $candidato = CandidatoController::recuperar($args["id"]);
+        $partido = PartidoController::recuperar($args["id"]);
 
-        if ($candidato) {
-            return $response->write(json_encode($candidato));
+        if ($partido) {
+            return $response->write(json_encode($partido));
         } else {
-            throw new MyException("Candidato não encontrado", 404);
+            throw new MyException("Partido não encontrado", 404);
         }
     });
 
@@ -27,67 +27,57 @@ $app->group("/partido", function() use ($app) {
         }
 
         if (!property_exists($json, "nome") || !$json->nome) {
-            throw new MyException("Nome é obrigatório!", 400);
+            throw new MyException("Nome do partido é obrigatório!", 400);
         }
 
-        if (!property_exists($json, "cpf") || !$json->cpf) {
-            throw new MyException("CPF é obrigatório!", 400);
+        if (!property_exists($json, "legenda") || !$json->legenda) {
+            throw new MyException("Legenda é obrigatória!", 400);
         }
 
-        if (!property_exists($json, "apto") || !$json->apto) {
-            throw new MyException("Apto é obrigatório!", 400);
-        }
+        $partido = new Partido();
+        $partido->nome = $json->nome;
+        $partido->legenda = $json->legenda;
 
-        $candidato = new Candidato();
-        $candidato->nome = $json->nome;
-        $candidato->cpf = $json->cpf;
-        $candidato->apto = $json->apto;
-
-        $idCandidato = CandidatoController::criar($candidato);
-        return $response->write(json_encode(CandidatoController::recuperar($idCandidato)));
+        $idPartido = PartidoController::criar($partido);
+        return $response->write(json_encode(PartidoController::recuperar($idPartido)));
     });
 
     $this->put("/{id:[0-9]+}", function(Request $request, Response $response, $args = []) use ($app) {
         $json = json_decode($request->getBody());
-        $idCandidato = $args["id"];
+        $idPartido = $args["id"];
 
         if (!is_object($json)) {
             throw new MyException("Objeto inválido", 400);
         }
 
         if (!property_exists($json, "nome") || !$json->nome) {
-            throw new MyException("Nome é obrigatório!", 400);
+            throw new MyException("Nome do partido é obrigatório!", 400);
         }
 
-        if (!property_exists($json, "cpf") || !$json->cpf) {
-            throw new MyException("CPF é obrigatório!", 400);
+        if (!property_exists($json, "legenda") || !$json->legenda) {
+            throw new MyException("Legenda é obrigatória!", 400);
         }
 
-        if (!property_exists($json, "apto") || !$json->cpf) {
-            throw new MyException("Apto é obrigatório!", 400);
+        if (!$partido = PartidoController::recuperar($idPartido)) {
+            throw new MyException("Partido não encontrado!", 404);
         }
 
-        if (!$candidato = CandidatoController::recuperar($idCandidato)) {
-            throw new MyException("Candidato não encontrado!", 404);
-        }
+        $partido->nome = $json->nome;
+        $partido->legenda = $json->legenda;
 
-        $candidato->nome = $json->nome;
-        $candidato->cpf = $json->cpf;
-        $candidato->apto = $json->apto;
-
-        CandidatoController::alterar($candidato);
-        return $response->write(json_encode(CandidatoController::recuperar($idCandidato)));
+        PartidoController::alterar($partido);
+        return $response->write(json_encode(PartidoController::recuperar($idPartido)));
     });
 
     $this->delete("/{id:[0-9]+}", function(Request $request, Response $response, $args = []) use ($app) {
-        $idCandidato = $args["id"];
+        $idPartido = $args["id"];
 
-        if (!$candidato = CandidatoController::recuperar($idCandidato)) {
-            throw new MyException("Candidato não encontrado!", 404);
+        if (!$partido = PartidoController::recuperar($idPartido)) {
+            throw new MyException("Partido não encontrado!", 404);
         }
 
-        CandidatoController::excluir($candidato);
-        return $response->write(json_encode($candidato));
+        PartidoController::excluir($partido);
+        return $response->write(json_encode($partido));
     });
 });
 

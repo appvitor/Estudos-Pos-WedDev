@@ -3,111 +3,109 @@
 class PartidoController {
 
     public static function listar() {
-        $sql = "SELECT idBem, descricao, valor 
-                FROM bem 
-                ORDER BY idBem";
+        $sql = "SELECT idPartido, nome, legenda 
+                FROM partido 
+                ORDER BY idPartido";
 
         $stmt = Conexao::getConexao()->prepare($sql);
         $stmt->execute();
 
-        $bens = [];
+        $partidos = [];
 
-        while ($bemBD = $stmt->fetch(PDO::FETCH_OBJ)) {
-            $bem = new Bem();
-            $bem->idBem = $bemBD->idBem;
-            $bem->descricao = $bemBD->descricao;
-            $bem->valor = $bemBD->valor;
+        while ($partidoBD = $stmt->fetch(PDO::FETCH_OBJ)) {
+            $partido = new Partido();
+            $partido->idPartido = $partidoBD->idPartido;
+            $partido->nome = $partidoBD->nome;
+            $partido->legenda = $partidoBD->legenda;
 
-            $bens[] = $bem;
+            $partidos[] = $partido;
         }
 
-        return $bens;
+        return $partidos;
     }
 
-    public static function recuperar($idBem) {
-        $sql = "SELECT idBem, descricao, valor
-                FROM bem 
-                WHERE idBem=:idBem";
+    public static function recuperar($idPartido) {
+        $sql = "SELECT idPartido, nome, legenda
+                FROM partido 
+                WHERE idPartido=:idPartido";
 
         $stmt = Conexao::getConexao()->prepare($sql);
-        $stmt->bindValue(":idBem", $idBem, PDO::PARAM_INT);
+        $stmt->bindValue(":idPartido", $idPartido, PDO::PARAM_INT);
         $stmt->execute();
 
-        if ($bemBD = $stmt->fetch(PDO::FETCH_OBJ)) {
-            $bem = new Bem();
-            $bem->idBem = $bemBD->idBem;
-            $bem->descricao = $bemBD->descricao;
-            $bem->valor = $bemBD->valor;
-            return $bem;
+        if ($partidoBD = $stmt->fetch(PDO::FETCH_OBJ)) {
+            $partido = new Partido();
+            $partido->idPartido = $partidoBD->idPartido;
+            $partido->nome = $partidoBD->nome;
+            $partido->legenda = $partidoBD->legenda;
+            return $partido;
         }
 
         return false;
     }
 
-    public static function recuperarPorCandidato($bem) {
-        $sql = "SELECT idBem, descricao, valor
-                FROM bem 
-                WHERE candidato=:candidato";
+    public static function recuperarPorCandidato($partido) {
+        $sql = "SELECT idPartido, nome, legenda
+                FROM partido 
+                WHERE estado=:estado";
 
         $stmt = Conexao::getConexao()->prepare($sql);
-        $stmt->bindValue(":usuario", $bem, PDO::PARAM_STR);
+        $stmt->bindValue(":usuario", $partido, PDO::PARAM_STR);
         $stmt->execute();
 
-        if ($bemBD = $stmt->fetch(PDO::FETCH_OBJ)) {
-            $bem = new Candidato();
-            $bem->idBem = $bemBD->idBem;
-            $bem->descricao = $bemBD->descricao;
-            $bem->valor = $bemBD->valor;
-            return $bem;
+        if ($partidoBD = $stmt->fetch(PDO::FETCH_OBJ)) {
+            $partido = new Partido();
+            $partido->idPartido = $partidoBD->idPartido;
+            $partido->nome = $partidoBD->nome;
+            $partido->legenda = $partidoBD->legenda;
+            return $partido;
         }
 
         return false;        
     }
     
-    public static function recuperarPorCandidatovalor($bem, $senha) {
-        $sql = "SELECT idBem, descricao, valor, apto 
-                FROM candidato 
-                WHERE candidato=:candidato AND valor=:valor";
+    public static function recuperarPorlegenda($legenda) {
+        $sql = "SELECT idPartido, nome, legenda 
+                FROM partido 
+                WHERE legenda=:legenda";
 
         $stmt = Conexao::getConexao()->prepare($sql);
-        $stmt->bindValue(":candidato", $bem, PDO::PARAM_STR);
-        $stmt->bindValue(":valor", $valor, PDO::PARAM_STR);
+        $stmt->bindValue(":legenda", $legenda, PDO::PARAM_STR);
         $stmt->execute();
 
-        if ($bemBD = $stmt->fetch(PDO::FETCH_OBJ)) {
-            $bem = new Candidato();
-            $bem->idBem = $bemBD->idBem;
-            $bem->descricao = $bemBD->descricao;
-            $bem->valor = $bemBD->valor;
-            return $bem;
+        if ($partidoBD = $stmt->fetch(PDO::FETCH_OBJ)) {
+            $partido = new Partido();
+            $partido->idPartido = $partidoBD->idPartido;
+            $partido->nome = $partidoBD->nome;
+            $partido->legenda = $partidoBD->legenda;
+            return $partido;
         }
 
         return false;        
     }
 
-    public static function criar(Candidato $bem) {
-        $sql = "INSERT INTO candidato(descricao, valor) VALUES(:descricao, :valor)";
+    public static function criar(Estado $partido) {
+        $sql = "INSERT INTO estado(nome, legenda) VALUES(:nome, :legenda)";
         $stmt = Conexao::getConexao()->prepare($sql);
-        $stmt->bindValue(":descricao", $bem->descricao, PDO::PARAM_STR);
-        $stmt->bindValue(":valor", $bem->valor, PDO::PARAM_STR);
+        $stmt->bindValue(":nome", $partido->nome, PDO::PARAM_STR);
+        $stmt->bindValue(":legenda", $partido->legenda, PDO::PARAM_STR);
         $stmt->execute();
-        $idBem = Conexao::getConexao()->lastInsertId();
-        return $idBem;
+        $idPartido = Conexao::getConexao()->lastInsertId();
+        return $idPartido;
     }
 
-    public static function alterar(Candidato $bem) {
-        $sql = "UPDATE candidato SET descricao=:descricao, valor=:valor WHERE idBem=:idBem";
+    public static function alterar(Estado $partido) {
+        $sql = "UPDATE estado SET nome=:nome, legenda=:legenda WHERE idPartido=:idPartido";
         $stmt = Conexao::getConexao()->prepare($sql);
-        $stmt->bindValue(":idBem", $bem->idBem, PDO::PARAM_INT);
-        $stmt->bindValue(":descricao", $bem->descricao, PDO::PARAM_STR);
-        $stmt->bindValue(":valor", $bem->valor, PDO::PARAM_STR);
+        $stmt->bindValue(":nome", $partido->nome, PDO::PARAM_STR);
+        $stmt->bindValue(":legenda", $partido->legenda, PDO::PARAM_STR);
         $stmt->execute();
     }
 
-    public static function excluir(Usuario $bem) {
-        $sql = "DELETE FROM candidato WHERE idBem=:idBem";
+    public static function excluir(Estado $partido) {
+        $sql = "DELETE FROM partido WHERE idPartido=:idPartido";
         $stmt = Conexao::getConexao()->prepare($sql);
-        $stmt->bindValue(":idBem", $bem->idBem, PDO::PARAM_INT);
+        $stmt->bindValue(":idPartido", $partido->idPartido, PDO::PARAM_INT);
         $stmt->execute();
 
         return $stmt->rowCount() == 1;
