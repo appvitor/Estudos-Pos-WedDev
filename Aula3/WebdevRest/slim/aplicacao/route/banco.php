@@ -33,7 +33,7 @@ $app->group("/banco", function() use ($app) {
             throw new \model\MyException("Nome do banco é obrigatório!", 400);
         }
 
-        $banco = new \model\banco();
+        $banco = new \model\Banco();
         $banco->nome = $json->nome;
 
         $idBanco = \controller\BancoController::criar($banco);

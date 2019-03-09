@@ -16,7 +16,7 @@ class BancoController {
         $bancos = [];
 
         while ($bancoBD = $sth->fetch(\PDO::FETCH_OBJ)) {
-            $banco = new \model\banco();
+            $banco = new \model\Banco();
             $banco->idBanco = $bancoBD->idBanco;
             $banco->nome = $bancoBD->nome;
             $bancos[] = $banco;
@@ -36,7 +36,7 @@ class BancoController {
         $sth->execute();
 
         if ($bancoBD = $sth->fetch(\PDO::FETCH_OBJ)) {
-            $banco = new \model\banco();
+            $banco = new \model\Banco();
             $banco->idBanco = $bancoBD->idBanco;
             $banco->nome = $bancoBD->nome;
 
@@ -46,7 +46,7 @@ class BancoController {
         return false;
     }
 
-    public static function criar(\model\banco $banco) {
+    public static function criar(\model\Banco $banco) {
         $sql = "INSERT INTO banco(nome) VALUES(:nome)";
         $sth = \controller\Conexao::getConexao()->prepare($sql);
         $sth->bindValue(":nome", $banco->nome, \PDO::PARAM_STR);
@@ -55,7 +55,7 @@ class BancoController {
         return \controller\Conexao::getConexao()->lastInsertId();
     }
 
-    public static function alterar(\model\banco $banco) {
+    public static function alterar(\model\Banco $banco) {
         $sql = "UPDATE banco SET nome=:nome WHERE idBanco=:idBanco";
         $sth = \controller\Conexao::getConexao()->prepare($sql);
         $sth->bindValue(":idBanco", $banco->idBanco, \PDO::PARAM_INT);
@@ -64,7 +64,7 @@ class BancoController {
 
     }
 
-    public static function excluir(\model\banco $banco) {
+    public static function excluir(\model\Banco $banco) {
         $sql = "DELETE FROM banco WHERE idBanco=:idBanco";
         $sth = \controller\Conexao::getConexao()->prepare($sql);
         $sth->bindValue(":idBanco", $banco->idBanco, \PDO::PARAM_INT);
