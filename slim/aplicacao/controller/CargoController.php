@@ -3,111 +3,85 @@
 class CargoController {
 
     public static function listar() {
-        $sql = "SELECT idBem, descricao, valor 
-                FROM bem 
-                ORDER BY idBem";
+        $sql = "SELECT idCargo, nome 
+                FROM cargo 
+                ORDER BY idCargo";
 
         $stmt = Conexao::getConexao()->prepare($sql);
         $stmt->execute();
 
-        $bens = [];
+        $cargos = [];
 
-        while ($bemBD = $stmt->fetch(PDO::FETCH_OBJ)) {
-            $bem = new Bem();
-            $bem->idBem = $bemBD->idBem;
-            $bem->descricao = $bemBD->descricao;
-            $bem->valor = $bemBD->valor;
+        while ($cargoBD = $stmt->fetch(PDO::FETCH_OBJ)) {
+            $cargo = new Cargo();
+            $cargo->idCargo = $cargoBD->idCargo;
+            $cargo->nome = $cargoBD->nome;
 
-            $bens[] = $bem;
+            $cargos[] = $cargo;
         }
 
-        return $bens;
+        return $cargos;
     }
 
-    public static function recuperar($idBem) {
-        $sql = "SELECT idBem, descricao, valor
-                FROM bem 
-                WHERE idBem=:idBem";
+    public static function recuperar($idCargo) {
+        $sql = "SELECT idCargo, nome
+                FROM cargo 
+                WHERE idCargo=:idCargo";
 
         $stmt = Conexao::getConexao()->prepare($sql);
-        $stmt->bindValue(":idBem", $idBem, PDO::PARAM_INT);
+        $stmt->bindValue(":idCargo", $idCargo, PDO::PARAM_INT);
         $stmt->execute();
 
-        if ($bemBD = $stmt->fetch(PDO::FETCH_OBJ)) {
-            $bem = new Bem();
-            $bem->idBem = $bemBD->idBem;
-            $bem->descricao = $bemBD->descricao;
-            $bem->valor = $bemBD->valor;
-            return $bem;
+        if ($cargoBD = $stmt->fetch(PDO::FETCH_OBJ)) {
+            $cargo = new Cargo();
+            $cargo->idCargo = $cargoBD->idCargo;
+            $cargo->nome = $cargoBD->nome;
+            return $cargo;
         }
 
         return false;
     }
 
-    public static function recuperarPorCandidato($bem) {
-        $sql = "SELECT idBem, descricao, valor
-                FROM bem 
-                WHERE candidato=:candidato";
+    public static function recuperarPorNome($cargo) {
+        $sql = "SELECT idCargo, nome
+                FROM cargo 
+                WHERE nome=:nome";
 
         $stmt = Conexao::getConexao()->prepare($sql);
-        $stmt->bindValue(":usuario", $bem, PDO::PARAM_STR);
+        $stmt->bindValue(":cargo", $cargo, PDO::PARAM_STR);
         $stmt->execute();
 
-        if ($bemBD = $stmt->fetch(PDO::FETCH_OBJ)) {
-            $bem = new Candidato();
-            $bem->idBem = $bemBD->idBem;
-            $bem->descricao = $bemBD->descricao;
-            $bem->valor = $bemBD->valor;
-            return $bem;
-        }
-
-        return false;        
-    }
-    
-    public static function recuperarPorCandidatovalor($bem, $senha) {
-        $sql = "SELECT idBem, descricao, valor, apto 
-                FROM candidato 
-                WHERE candidato=:candidato AND valor=:valor";
-
-        $stmt = Conexao::getConexao()->prepare($sql);
-        $stmt->bindValue(":candidato", $bem, PDO::PARAM_STR);
-        $stmt->bindValue(":valor", $valor, PDO::PARAM_STR);
-        $stmt->execute();
-
-        if ($bemBD = $stmt->fetch(PDO::FETCH_OBJ)) {
-            $bem = new Candidato();
-            $bem->idBem = $bemBD->idBem;
-            $bem->descricao = $bemBD->descricao;
-            $bem->valor = $bemBD->valor;
-            return $bem;
+        if ($cargoBD = $stmt->fetch(PDO::FETCH_OBJ)) {
+            $cargo = new Cargo();
+            $cargo->idCargo = $cargoBD->idCargo;
+            $cargo->nome = $cargoBD->nome;
+            return $cargo;
         }
 
         return false;        
     }
 
-    public static function criar(Candidato $bem) {
-        $sql = "INSERT INTO candidato(descricao, valor) VALUES(:descricao, :valor)";
+    public static function criar(Cargo $cargo) {
+        $sql = "INSERT INTO cargo(nome) VALUES(:nome)";
         $stmt = Conexao::getConexao()->prepare($sql);
-        $stmt->bindValue(":descricao", $bem->descricao, PDO::PARAM_STR);
-        $stmt->bindValue(":valor", $bem->valor, PDO::PARAM_STR);
+        $stmt->bindValue(":nome", $cargo->nome, PDO::PARAM_STR);
         $stmt->execute();
-        $idBem = Conexao::getConexao()->lastInsertId();
-        return $idBem;
+        $idCargo = Conexao::getConexao()->lastInsertId();
+        return $idCargo;
     }
 
-    public static function alterar(Candidato $bem) {
-        $sql = "UPDATE candidato SET descricao=:descricao, valor=:valor WHERE idBem=:idBem";
+    public static function alterar(Cargo $cargo) {
+        $sql = "UPDATE candidato SET nome=:nome WHERE idCargo=:idCargo";
         $stmt = Conexao::getConexao()->prepare($sql);
-        $stmt->bindValue(":idBem", $bem->idBem, PDO::PARAM_INT);
-        $stmt->bindValue(":descricao", $bem->descricao, PDO::PARAM_STR);
-        $stmt->bindValue(":valor", $bem->valor, PDO::PARAM_STR);
+        $stmt->bindValue(":idCargo", $cargo->idCargo, PDO::PARAM_INT);
+        $stmt->bindValue(":descricao", $cargo->nome, PDO::PARAM_STR);
         $stmt->execute();
     }
 
-    public static function excluir(Usuario $bem) {
-        $sql = "DELETE FROM candidato WHERE idBem=:idBem";
+    public static function excluir(Usuario $cargo) {
+        $sql = "DELETE FROM cargo WHERE idCargo=:idCargo";
         $stmt = Conexao::getConexao()->prepare($sql);
-        $stmt->bindValue(":idBem", $bem->idBem, PDO::PARAM_INT);
+        $stmt->bindValue(":idCargo", $cargo->idCargo, PDO::PARAM_INT);
         $stmt->execute();
 
         return $stmt->rowCount() == 1;
