@@ -6,16 +6,16 @@ use Psr\Http\Message\ResponseInterface as Response;
 $app->group("/estado", function() use ($app) {
 
     $this->get("", function(Request $request, Response $response, $args = []) use ($app) {
-        return $response->write(json_encode(CandidatoController::listar()));
+        return $response->write(json_encode(EstadoController::listar()));
     });
 
     $this->get("/{id:[0-9]+}", function(Request $request, Response $response, $args = []) use ($app) {
-        $candidato = CandidatoController::recuperar($args["id"]);
+        $estado = EstadoController::recuperar($args["id"]);
 
-        if ($candidato) {
-            return $response->write(json_encode($candidato));
+        if ($estado) {
+            return $response->write(json_encode($estado));
         } else {
-            throw new MyException("Candidato não encontrado", 404);
+            throw new MyException("Estado não encontrado", 404);
         }
     });
 
@@ -27,29 +27,26 @@ $app->group("/estado", function() use ($app) {
         }
 
         if (!property_exists($json, "nome") || !$json->nome) {
-            throw new MyException("Nome é obrigatório!", 400);
+            throw new MyException("Nome do Estado é obrigatório!", 400);
         }
 
-        if (!property_exists($json, "cpf") || !$json->cpf) {
-            throw new MyException("CPF é obrigatório!", 400);
+        if (!property_exists($json, "sigla") || !$json->sigla) {
+            throw new MyException("Sigla é obrigatória!", 400);
         }
 
-        if (!property_exists($json, "apto") || !$json->apto) {
-            throw new MyException("Apto é obrigatório!", 400);
-        }
 
-        $candidato = new Candidato();
-        $candidato->nome = $json->nome;
-        $candidato->cpf = $json->cpf;
-        $candidato->apto = $json->apto;
+        $estado = new Estado();
+        $estado->nome = $json->nome;
+        $estado->sigla = $json->sigla;
 
-        $idCandidato = CandidatoController::criar($candidato);
-        return $response->write(json_encode(CandidatoController::recuperar($idCandidato)));
+
+        $idEstado = EstadoController::criar($estado);
+        return $response->write(json_encode(EstadoController::recuperar($idEstado)));
     });
 
     $this->put("/{id:[0-9]+}", function(Request $request, Response $response, $args = []) use ($app) {
         $json = json_decode($request->getBody());
-        $idCandidato = $args["id"];
+        $idEstado = $args["id"];
 
         if (!is_object($json)) {
             throw new MyException("Objeto inválido", 400);
@@ -59,35 +56,30 @@ $app->group("/estado", function() use ($app) {
             throw new MyException("Nome é obrigatório!", 400);
         }
 
-        if (!property_exists($json, "cpf") || !$json->cpf) {
-            throw new MyException("CPF é obrigatório!", 400);
+        if (!property_exists($json, "sigla") || !$json->sigla) {
+            throw new MyException("Sigla é obrigatório!", 400);
         }
 
-        if (!property_exists($json, "apto") || !$json->cpf) {
-            throw new MyException("Apto é obrigatório!", 400);
+        if (!$estado = EstadoController::recuperar($idEstado)) {
+            throw new MyException("Estado não encontrado!", 404);
         }
 
-        if (!$candidato = CandidatoController::recuperar($idCandidato)) {
-            throw new MyException("Candidato não encontrado!", 404);
-        }
+        $estado->nome = $json->nome;
+        $estado->sigla = $json->sigla;
 
-        $candidato->nome = $json->nome;
-        $candidato->cpf = $json->cpf;
-        $candidato->apto = $json->apto;
-
-        CandidatoController::alterar($candidato);
-        return $response->write(json_encode(CandidatoController::recuperar($idCandidato)));
+        EstadoController::alterar($estado);
+        return $response->write(json_encode(EstadoController::recuperar($idEstado)));
     });
 
     $this->delete("/{id:[0-9]+}", function(Request $request, Response $response, $args = []) use ($app) {
-        $idCandidato = $args["id"];
+        $idEstado = $args["id"];
 
-        if (!$candidato = CandidatoController::recuperar($idCandidato)) {
-            throw new MyException("Candidato não encontrado!", 404);
+        if (!$estado = EstadoController::recuperar($idEstado)) {
+            throw new MyException("Estado não encontrado!", 404);
         }
 
-        CandidatoController::excluir($candidato);
-        return $response->write(json_encode($candidato));
+        EstadoController::excluir($estado);
+        return $response->write(json_encode($estado));
     });
 });
 

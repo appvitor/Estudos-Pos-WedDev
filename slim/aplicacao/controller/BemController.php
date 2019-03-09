@@ -54,7 +54,7 @@ class BemController {
         $stmt->execute();
 
         if ($bemBD = $stmt->fetch(PDO::FETCH_OBJ)) {
-            $bem = new Candidato();
+            $bem = new Bem();
             $bem->idBem = $bemBD->idBem;
             $bem->descricao = $bemBD->descricao;
             $bem->valor = $bemBD->valor;
@@ -75,7 +75,7 @@ class BemController {
         $stmt->execute();
 
         if ($bemBD = $stmt->fetch(PDO::FETCH_OBJ)) {
-            $bem = new Candidato();
+            $bem = new Bem();
             $bem->idBem = $bemBD->idBem;
             $bem->descricao = $bemBD->descricao;
             $bem->valor = $bemBD->valor;
@@ -85,7 +85,7 @@ class BemController {
         return false;        
     }
 
-    public static function criar(Candidato $bem) {
+    public static function criar(Bem $bem) {
         $sql = "INSERT INTO candidato(descricao, valor) VALUES(:descricao, :valor)";
         $stmt = Conexao::getConexao()->prepare($sql);
         $stmt->bindValue(":descricao", $bem->descricao, PDO::PARAM_STR);
@@ -95,7 +95,7 @@ class BemController {
         return $idBem;
     }
 
-    public static function alterar(Candidato $bem) {
+    public static function alterar(Bem $bem) {
         $sql = "UPDATE candidato SET descricao=:descricao, valor=:valor WHERE idBem=:idBem";
         $stmt = Conexao::getConexao()->prepare($sql);
         $stmt->bindValue(":idBem", $bem->idBem, PDO::PARAM_INT);
@@ -104,7 +104,7 @@ class BemController {
         $stmt->execute();
     }
 
-    public static function excluir(Usuario $bem) {
+    public static function excluir(Bem $bem) {
         $sql = "DELETE FROM candidato WHERE idBem=:idBem";
         $stmt = Conexao::getConexao()->prepare($sql);
         $stmt->bindValue(":idBem", $bem->idBem, PDO::PARAM_INT);

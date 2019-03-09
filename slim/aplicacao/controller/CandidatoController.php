@@ -88,7 +88,7 @@ class CandidatoController {
         $stmt->execute();
     }
 
-    public static function excluir(Usuario $candidato) {
+    public static function excluir(Candidato $candidato) {
         $sql = "DELETE FROM candidato WHERE idCandidato=:idCandidato";
         $stmt = Conexao::getConexao()->prepare($sql);
         $stmt->bindValue(":idCandidato", $candidato->idCandidato, PDO::PARAM_INT);
