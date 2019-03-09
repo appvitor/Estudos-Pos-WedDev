@@ -2,7 +2,7 @@
 
 define("JWT_PASS", "webdev");
 
-include_once("../vendor/autoload.php");
+include_once("../../vendor/autoload.php");
 include_once("./model/MyException.php");
 include_once("./controller/Conexao.php");
 include_once("./model/Bem.php");
@@ -65,7 +65,7 @@ $app->add(function(Request $request, Response $response, $next) use($app) {
 
     $rotasLiberadas = array("login");
 
-    if (!in_array($request->getUri()->getPath(), $rotasLiberadas)) {
+   /* if (!in_array($request->getUri()->getPath(), $rotasLiberadas)) {
 
         if ($request->hasHeader("token")) {
             $token = $request->getHeaderLine("token");
@@ -79,7 +79,7 @@ $app->add(function(Request $request, Response $response, $next) use($app) {
             return $response->write("Token não existe!")->withStatus(401, "Token não existe!");
         }
     }
-
+*/
     $response = $response->withHeader("Content-type", "application/json");
     $response = $next($request, $response);
     return $response;
