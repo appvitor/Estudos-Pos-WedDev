@@ -3,7 +3,7 @@
 use Psr\Http\Message\RequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 
-$app->group("/candidato", function() use ($app) {
+$app->group("/eleicao", function() use ($app) {
 
     $this->get("", function(Request $request, Response $response, $args = []) use ($app) {
         return $response->write(json_encode(CandidatoController::listar()));
@@ -63,7 +63,7 @@ $app->group("/candidato", function() use ($app) {
             throw new MyException("CPF é obrigatório!", 400);
         }
 
-        if (!property_exists($json, "apto") || !$json->apto) {
+        if (!property_exists($json, "apto") || !$json->cpf) {
             throw new MyException("Apto é obrigatório!", 400);
         }
 
