@@ -45,6 +45,27 @@ class CandidatoController {
 
         return false;
     }
+
+    public static function recuperarPorNome($nome) {
+        $sql = "SELECT idCandidato, nome, cpf, apto 
+                FROM candidato 
+                WHERE nome=:nome";
+
+        $stmt = Conexao::getConexao()->prepare($sql);
+        $stmt->bindValue(":nome", $nome, PDO::PARAM_STR);
+        $stmt->execute();
+
+        if ($candidatoBD = $stmt->fetch(PDO::FETCH_OBJ)) {
+            $candidato = new Candidato();
+            $candidato->idCandidato = $candidatoBD->idCandidato;
+            $candidato->nome = $candidatoBD->nome;
+            $candidato->cpf = $candidatoBD->cpf;
+            $candidato->apto = $candidatoBD->apto;
+            return $candidato;
+        }
+
+        return false;        
+    }
     
     public static function recuperarPorCpf($cpf) {
         $sql = "SELECT idCandidato, nome, cpf, apto 

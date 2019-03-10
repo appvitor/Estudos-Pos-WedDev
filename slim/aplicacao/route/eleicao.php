@@ -9,6 +9,7 @@ $app->group("/eleicao", function() use ($app) {
         return $response->write(json_encode(EleicaoController::listar()));
     });
 
+
     $this->get("/{id:[0-9]+}", function(Request $request, Response $response, $args = []) use ($app) {
         $eleicao = EleicaoController::recuperar($args["id"]);
 
@@ -19,6 +20,26 @@ $app->group("/eleicao", function() use ($app) {
         }
     });
 
+    $this->get("/{nome}", function(Request $request, Response $response, $args = []) use ($app) {
+        $eleicao = EleicaoController::recuperarPorNome($args["nome"]);
+
+        if ($eleicao) {
+            return $response->write(json_encode($eleicao));
+        } else {
+            throw new MyException("Eleição não encontrada", 404);
+        }
+    });
+
+    $this->get("/{ano:[0-9]+4}", function(Request $request, Response $response, $args = []) use ($app) {
+        $eleicao = EleicaoController::recuperarPorAno($args["ano"]);
+
+        if ($eleicao) {
+            return $response->write(json_encode($eleicao));
+        } else {
+            throw new MyException("Eleição não encontrada", 404);
+        }
+    });
+    
     $this->post("", function(Request $request, Response $response, $args = []) use ($app) {
         $json = json_decode($request->getBody());
 
@@ -31,7 +52,7 @@ $app->group("/eleicao", function() use ($app) {
         }
 
         if (!property_exists($json, "ano") || !$json->ano) {
-            throw new MyException("ano é obrigatório!", 400);
+            throw new MyException("Ano é obrigatório!", 400);
         }
 
         $eleicao = new Eleicao();
@@ -44,7 +65,7 @@ $app->group("/eleicao", function() use ($app) {
 
     $this->put("/{id:[0-9]+}", function(Request $request, Response $response, $args = []) use ($app) {
         $json = json_decode($request->getBody());
-        $idCandidato = $args["id"];
+        $idEleicao = $args["id"];
 
         if (!is_object($json)) {
             throw new MyException("Objeto inválido", 400);
@@ -55,7 +76,7 @@ $app->group("/eleicao", function() use ($app) {
         }
 
         if (!property_exists($json, "ano") || !$json->ano) {
-            throw new MyException("ano é obrigatório!", 400);
+            throw new MyException("Ano é obrigatório!", 400);
         }
 
         if (!$eleicao = EleicaoController::recuperar($idCandidato)) {
@@ -70,7 +91,7 @@ $app->group("/eleicao", function() use ($app) {
     });
 
     $this->delete("/{id:[0-9]+}", function(Request $request, Response $response, $args = []) use ($app) {
-        $idCandidato = $args["id"];
+        $idEleicao = $args["id"];
 
         if (!$eleicao = EleicaoController::recuperar($idCandidato)) {
             throw new MyException("Eleição não encontrada!", 404);

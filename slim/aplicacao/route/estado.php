@@ -19,6 +19,26 @@ $app->group("/estado", function() use ($app) {
         }
     });
 
+    $this->get("/{nome}", function(Request $request, Response $response, $args = []) use ($app) {
+        $estado = EstadoController::recuperarPorNome($args["nome"]);
+
+        if ($estado) {
+            return $response->write(json_encode($estado));
+        } else {
+            throw new MyException("Estado não encontrado", 404);
+        }
+    });
+
+    $this->get("/{sigla}", function(Request $request, Response $response, $args = []) use ($app) {
+        $estado = EstadoController::recuperarPorSigla($args["sigla"]);
+
+        if ($estado) {
+            return $response->write(json_encode($estado));
+        } else {
+            throw new MyException("Estado não encontrado", 404);
+        }
+    });
+
     $this->post("", function(Request $request, Response $response, $args = []) use ($app) {
         $json = json_decode($request->getBody());
 
@@ -33,7 +53,6 @@ $app->group("/estado", function() use ($app) {
         if (!property_exists($json, "sigla") || !$json->sigla) {
             throw new MyException("Sigla é obrigatória!", 400);
         }
-
 
         $estado = new Estado();
         $estado->nome = $json->nome;

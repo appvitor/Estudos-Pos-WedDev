@@ -19,6 +19,26 @@ $app->group("/candidato", function() use ($app) {
         }
     });
 
+    $this->get("/{nome}", function(Request $request, Response $response, $args = []) use ($app) {
+        $candidato = CandidatoController::recuperarPorNome($args["nome"]);
+
+        if ($candidato) {
+            return $response->write(json_encode($candidato));
+        } else {
+            throw new MyException("Candidato não encontrado", 404);
+        }
+    });
+
+    $this->get("/{cpf:[0-9]+11}", function(Request $request, Response $response, $args = []) use ($app) {
+        $candidato = CandidatoController::recuperarPorCpf($args["cpf"]);
+
+        if ($candidato) {
+            return $response->write(json_encode($candidato));
+        } else {
+            throw new MyException("Candidato não encontrado", 404);
+        }
+    });
+
     $this->post("", function(Request $request, Response $response, $args = []) use ($app) {
         $json = json_decode($request->getBody());
 
