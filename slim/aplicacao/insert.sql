@@ -95,6 +95,3 @@ INSERT INTO bem (idTipo, idCandidato, descricao, valor) VALUES(2,2,'Carro',50000
 
 INSERT INTO usuario (nome, usuario, senha, administrador) VALUES('Administrador','admin','admin','S');
 INSERT INTO usuario (nome, usuario, senha, administrador) VALUES('Consulta','consulta','consulta','N');
-
-
-

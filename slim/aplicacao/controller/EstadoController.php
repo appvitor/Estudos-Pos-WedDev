@@ -44,13 +44,13 @@ class EstadoController {
         return false;
     }
 
-    public static function recuperarPorCandidato($estado) {
+    public static function recuperarPorNome($nome) {
         $sql = "SELECT idEstado, nome, sigla
                 FROM estado 
-                WHERE estado=:estado";
+                WHERE nome=:nome";
 
         $stmt = Conexao::getConexao()->prepare($sql);
-        $stmt->bindValue(":usuario", $estado, PDO::PARAM_STR);
+        $stmt->bindValue(":nome", $nome, PDO::PARAM_STR);
         $stmt->execute();
 
         if ($estadoBD = $stmt->fetch(PDO::FETCH_OBJ)) {
@@ -97,6 +97,7 @@ class EstadoController {
     public static function alterar(Estado $estado) {
         $sql = "UPDATE estado SET nome=:nome, sigla=:sigla WHERE idEstado=:idEstado";
         $stmt = Conexao::getConexao()->prepare($sql);
+        $stmt->bindValue(":idEstado", $estado->idEstado, PDO::PARAM_STR);
         $stmt->bindValue(":nome", $estado->nome, PDO::PARAM_STR);
         $stmt->bindValue(":sigla", $estado->sigla, PDO::PARAM_STR);
         $stmt->execute();

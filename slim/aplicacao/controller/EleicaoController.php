@@ -3,111 +3,110 @@
 class EleicaoController {
 
     public static function listar() {
-        $sql = "SELECT idBem, descricao, valor 
-                FROM bem 
-                ORDER BY idBem";
+        $sql = "SELECT idEleicao, nome, ano 
+                FROM eleicao 
+                ORDER BY idEleicao";
 
         $stmt = Conexao::getConexao()->prepare($sql);
         $stmt->execute();
 
-        $bens = [];
+        $eleicoes = [];
 
-        while ($bemBD = $stmt->fetch(PDO::FETCH_OBJ)) {
-            $bem = new Bem();
-            $bem->idBem = $bemBD->idBem;
-            $bem->descricao = $bemBD->descricao;
-            $bem->valor = $bemBD->valor;
+        while ($eleicaoBD = $stmt->fetch(PDO::FETCH_OBJ)) {
+            $eleicao = new Eleicao();
+            $eleicao->idEleicao = $eleicaoBD->idEleicao;
+            $eleicao->nome = $eleicaoBD->nome;
+            $eleicao->ano = $eleicaoBD->ano;
 
-            $bens[] = $bem;
+            $eleicoes[] = $eleicao;
         }
 
-        return $bens;
+        return $eleicoes;
     }
 
-    public static function recuperar($idBem) {
-        $sql = "SELECT idBem, descricao, valor
+    public static function recuperar($idEleicao) {
+        $sql = "SELECT idEleicao, nome, ano
                 FROM bem 
-                WHERE idBem=:idBem";
+                WHERE idEleicao=:idEleicao";
 
         $stmt = Conexao::getConexao()->prepare($sql);
-        $stmt->bindValue(":idBem", $idBem, PDO::PARAM_INT);
+        $stmt->bindValue(":idEleicao", $idEleicao, PDO::PARAM_INT);
         $stmt->execute();
 
-        if ($bemBD = $stmt->fetch(PDO::FETCH_OBJ)) {
-            $bem = new Bem();
-            $bem->idBem = $bemBD->idBem;
-            $bem->descricao = $bemBD->descricao;
-            $bem->valor = $bemBD->valor;
-            return $bem;
+        if ($eleicaoBD = $stmt->fetch(PDO::FETCH_OBJ)) {
+            $eleicao = new Eleicao();
+            $eleicao->idEleicao = $eleicaoBD->idEleicao;
+            $eleicao->nome = $eleicaoBD->nome;
+            $eleicao->ano = $eleicaoBD->ano;
+            return $eleicao;
         }
 
         return false;
     }
 
-    public static function recuperarPorCandidato($bem) {
-        $sql = "SELECT idBem, descricao, valor
-                FROM bem 
-                WHERE candidato=:candidato";
+    public static function recuperarPorNome($nome) {
+        $sql = "SELECT idEleicao, nome, ano
+                FROM eleicao 
+                WHERE nome=:nome";
 
         $stmt = Conexao::getConexao()->prepare($sql);
-        $stmt->bindValue(":usuario", $bem, PDO::PARAM_STR);
+        $stmt->bindValue(":nome", $nome, PDO::PARAM_STR);
         $stmt->execute();
 
-        if ($bemBD = $stmt->fetch(PDO::FETCH_OBJ)) {
-            $bem = new Candidato();
-            $bem->idBem = $bemBD->idBem;
-            $bem->descricao = $bemBD->descricao;
-            $bem->valor = $bemBD->valor;
-            return $bem;
+        if ($eleicaoBD = $stmt->fetch(PDO::FETCH_OBJ)) {
+            $eleicao = new Eleicao();
+            $eleicao->idEleicao = $eleicaoBD->idEleicao;
+            $eleicao->nome = $eleicaoBD->nome;
+            $eleicao->ano = $eleicaoBD->ano;
+            return $eleicao;
         }
 
         return false;        
     }
     
-    public static function recuperarPorCandidatovalor($bem, $senha) {
-        $sql = "SELECT idBem, descricao, valor, apto 
-                FROM candidato 
-                WHERE candidato=:candidato AND valor=:valor";
+    public static function recuperarPorAno($ano) {
+        $sql = "SELECT idEleicao, nome, ano 
+                FROM eleicao 
+                WHERE ano=:ano";
 
         $stmt = Conexao::getConexao()->prepare($sql);
-        $stmt->bindValue(":candidato", $bem, PDO::PARAM_STR);
-        $stmt->bindValue(":valor", $valor, PDO::PARAM_STR);
+        $stmt->bindValue(":ano", $ano, PDO::PARAM_STR);
         $stmt->execute();
 
-        if ($bemBD = $stmt->fetch(PDO::FETCH_OBJ)) {
-            $bem = new Candidato();
-            $bem->idBem = $bemBD->idBem;
-            $bem->descricao = $bemBD->descricao;
-            $bem->valor = $bemBD->valor;
-            return $bem;
+        if ($eleicaoBD = $stmt->fetch(PDO::FETCH_OBJ)) {
+            $eleicao = new Eleicao();
+            $eleicao->idEleicao = $eleicaoBD->idEleicao;
+            $eleicao->nome = $eleicaoBD->nome;
+            $eleicao->ano = $eleicaoBD->ano;
+            return $eleicao;
         }
 
         return false;        
     }
 
-    public static function criar(Candidato $bem) {
-        $sql = "INSERT INTO candidato(descricao, valor) VALUES(:descricao, :valor)";
+    public static function criar(Eleicao $eleicao) {
+        $sql = "INSERT INTO eleicao(nome, ano) VALUES(:nome, :ano)";
         $stmt = Conexao::getConexao()->prepare($sql);
-        $stmt->bindValue(":descricao", $bem->descricao, PDO::PARAM_STR);
-        $stmt->bindValue(":valor", $bem->valor, PDO::PARAM_STR);
+        $stmt->bindValue(":nome", $eleicao->nome, PDO::PARAM_STR);
+        $stmt->bindValue(":ano", $eleicao->ano, PDO::PARAM_STR);
         $stmt->execute();
-        $idBem = Conexao::getConexao()->lastInsertId();
-        return $idBem;
+        $idEleicao = Conexao::getConexao()->lastInsertId();
+        return $idEleicao;
     }
 
-    public static function alterar(Candidato $bem) {
-        $sql = "UPDATE candidato SET descricao=:descricao, valor=:valor WHERE idBem=:idBem";
+    public static function alterar(Eleicao $eleicao) {
+        $sql = "UPDATE eleicao SET nome=:nome, ano=:ano WHERE idEleicao=:idEleicao";
         $stmt = Conexao::getConexao()->prepare($sql);
-        $stmt->bindValue(":idBem", $bem->idBem, PDO::PARAM_INT);
-        $stmt->bindValue(":descricao", $bem->descricao, PDO::PARAM_STR);
-        $stmt->bindValue(":valor", $bem->valor, PDO::PARAM_STR);
+        $stmt->bindValue(":idEleicao", $eleicao->idEleicao, PDO::PARAM_INT);
+        $stmt->bindValue(":nome", $eleicao->nome, PDO::PARAM_STR);
+        $stmt->bindValue(":ano", $eleicao->ano, PDO::PARAM_STR);
         $stmt->execute();
     }
 
-    public static function excluir(Usuario $bem) {
-        $sql = "DELETE FROM candidato WHERE idBem=:idBem";
+    public static function excluir(Eleicao $eleicao) {
+        $sql = "DELETE FROM eleicao WHERE idEleicao=:idEleicao";
         $stmt = Conexao::getConexao()->prepare($sql);
-        $stmt->bindValue(":idBem", $bem->idBem, PDO::PARAM_INT);
+        $stmt->bindValue(":idEleicao", $eleicao->idEleicao, PDO::PARAM_INT);
         $stmt->execute();
 
         return $stmt->rowCount() == 1;

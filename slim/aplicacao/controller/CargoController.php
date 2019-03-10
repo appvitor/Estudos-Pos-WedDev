@@ -78,7 +78,7 @@ class CargoController {
         $stmt->execute();
     }
 
-    public static function excluir(Usuario $cargo) {
+    public static function excluir(Cargo $cargo) {
         $sql = "DELETE FROM cargo WHERE idCargo=:idCargo";
         $stmt = Conexao::getConexao()->prepare($sql);
         $stmt->bindValue(":idCargo", $cargo->idCargo, PDO::PARAM_INT);
