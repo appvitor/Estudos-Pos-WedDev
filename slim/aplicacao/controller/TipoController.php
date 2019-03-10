@@ -3,111 +3,86 @@
 class TipoController {
 
     public static function listar() {
-        $sql = "SELECT idBem, descricao, valor 
-                FROM bem 
-                ORDER BY idBem";
+        $sql = "SELECT idTipo, nome 
+                FROM tipo 
+                ORDER BY idTipo";
 
         $stmt = Conexao::getConexao()->prepare($sql);
         $stmt->execute();
 
         $bens = [];
 
-        while ($bemBD = $stmt->fetch(PDO::FETCH_OBJ)) {
-            $bem = new Bem();
-            $bem->idBem = $bemBD->idBem;
-            $bem->descricao = $bemBD->descricao;
-            $bem->valor = $bemBD->valor;
+        while ($tipoBD = $stmt->fetch(PDO::FETCH_OBJ)) {
+            $tipo = new tipo();
+            $tipo->idTipo = $tipoBD->idTipo;
+            $tipo->nome = $tipoBD->nome;
+            $tipo->valor = $tipoBD->valor;
 
-            $bens[] = $bem;
+            $bens[] = $tipo;
         }
 
         return $bens;
     }
 
-    public static function recuperar($idBem) {
-        $sql = "SELECT idBem, descricao, valor
-                FROM bem 
-                WHERE idBem=:idBem";
+    public static function recuperar($idTipo) {
+        $sql = "SELECT idTipo, nome
+                FROM tipo 
+                WHERE idTipo=:idTipo";
 
         $stmt = Conexao::getConexao()->prepare($sql);
-        $stmt->bindValue(":idBem", $idBem, PDO::PARAM_INT);
+        $stmt->bindValue(":idTipo", $idTipo, PDO::PARAM_INT);
         $stmt->execute();
 
-        if ($bemBD = $stmt->fetch(PDO::FETCH_OBJ)) {
-            $bem = new Bem();
-            $bem->idBem = $bemBD->idBem;
-            $bem->descricao = $bemBD->descricao;
-            $bem->valor = $bemBD->valor;
-            return $bem;
+        if ($tipoBD = $stmt->fetch(PDO::FETCH_OBJ)) {
+            $tipo = new tipo();
+            $tipo->idTipo = $tipoBD->idTipo;
+            $tipo->nome = $tipoBD->nome;
+            return $tipo;
         }
 
         return false;
     }
 
-    public static function recuperarPorCandidato($bem) {
-        $sql = "SELECT idBem, descricao, valor
-                FROM bem 
-                WHERE candidato=:candidato";
+    public static function recuperarPorNome($nome) {
+        $sql = "SELECT idTipo, nome
+                FROM tipo 
+                WHERE nome=:nome";
 
         $stmt = Conexao::getConexao()->prepare($sql);
-        $stmt->bindValue(":usuario", $bem, PDO::PARAM_STR);
+        $stmt->bindValue(":nome", $nome, PDO::PARAM_STR);
         $stmt->execute();
 
-        if ($bemBD = $stmt->fetch(PDO::FETCH_OBJ)) {
-            $bem = new Candidato();
-            $bem->idBem = $bemBD->idBem;
-            $bem->descricao = $bemBD->descricao;
-            $bem->valor = $bemBD->valor;
-            return $bem;
-        }
-
-        return false;        
-    }
-    
-    public static function recuperarPorCandidatovalor($bem, $senha) {
-        $sql = "SELECT idBem, descricao, valor, apto 
-                FROM candidato 
-                WHERE candidato=:candidato AND valor=:valor";
-
-        $stmt = Conexao::getConexao()->prepare($sql);
-        $stmt->bindValue(":candidato", $bem, PDO::PARAM_STR);
-        $stmt->bindValue(":valor", $valor, PDO::PARAM_STR);
-        $stmt->execute();
-
-        if ($bemBD = $stmt->fetch(PDO::FETCH_OBJ)) {
-            $bem = new Candidato();
-            $bem->idBem = $bemBD->idBem;
-            $bem->descricao = $bemBD->descricao;
-            $bem->valor = $bemBD->valor;
-            return $bem;
+        if ($tipoBD = $stmt->fetch(PDO::FETCH_OBJ)) {
+            $tipo = new Tipo();
+            $tipo->idTipo = $tipoBD->idTipo;
+            $tipo->nome = $tipoBD->nome;
+            return $tipo;
         }
 
         return false;        
     }
 
-    public static function criar(Candidato $bem) {
-        $sql = "INSERT INTO candidato(descricao, valor) VALUES(:descricao, :valor)";
+    public static function criar(Tipo $tipo) {
+        $sql = "INSERT INTO tipo(nome) VALUES(:nome)";
         $stmt = Conexao::getConexao()->prepare($sql);
-        $stmt->bindValue(":descricao", $bem->descricao, PDO::PARAM_STR);
-        $stmt->bindValue(":valor", $bem->valor, PDO::PARAM_STR);
+        $stmt->bindValue(":nome", $tipo->nome, PDO::PARAM_STR);
         $stmt->execute();
-        $idBem = Conexao::getConexao()->lastInsertId();
-        return $idBem;
+        $idTipo = Conexao::getConexao()->lastInsertId();
+        return $idTipo;
     }
 
-    public static function alterar(Candidato $bem) {
-        $sql = "UPDATE candidato SET descricao=:descricao, valor=:valor WHERE idBem=:idBem";
+    public static function alterar(Tipo $tipo) {
+        $sql = "UPDATE tipo SET nome=:nome WHERE idTipo=:idTipo";
         $stmt = Conexao::getConexao()->prepare($sql);
-        $stmt->bindValue(":idBem", $bem->idBem, PDO::PARAM_INT);
-        $stmt->bindValue(":descricao", $bem->descricao, PDO::PARAM_STR);
-        $stmt->bindValue(":valor", $bem->valor, PDO::PARAM_STR);
+        $stmt->bindValue(":idTipo", $tipo->idTipo, PDO::PARAM_INT);
+        $stmt->bindValue(":nome", $tipo->nome, PDO::PARAM_STR);
         $stmt->execute();
     }
 
-    public static function excluir(Usuario $bem) {
-        $sql = "DELETE FROM candidato WHERE idBem=:idBem";
+    public static function excluir(Tipo $tipo) {
+        $sql = "DELETE FROM tipo WHERE idTipo=:idTipo";
         $stmt = Conexao::getConexao()->prepare($sql);
-        $stmt->bindValue(":idBem", $bem->idBem, PDO::PARAM_INT);
+        $stmt->bindValue(":idTipo", $tipo->idTipo, PDO::PARAM_INT);
         $stmt->execute();
 
         return $stmt->rowCount() == 1;
