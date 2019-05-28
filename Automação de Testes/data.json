@@ -1,0 +1,17 @@
+[
+	{
+		"login": "appvitor",
+		"senha": "senha1",
+		"nome" : "Vítor Corrêa"
+	},
+	{
+		"login": "julio0001",
+		"senha": "123456",
+		"nome" : "Julio"
+	},
+	{
+		"login": "unicesumar",
+		"senha": "123456",
+		"nome" : "Unicesumar"
+	}
+]
